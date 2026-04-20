@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
-import { PokemonType } from "./types/pokemon";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { PokemonType } from "../types/pokemon";
 
 export default function Index() {
   const [pokemmons, setPokemons] = useState<PokemonType[]>([]);
@@ -18,8 +18,8 @@ export default function Index() {
       // console.log(data);
 
       const detaildPokemons = await Promise.all(
-        data.results.map(async (pokemon: PokemonType) => {
-          const res = await fetch(pokemon.image);
+        data.results.map(async (pokemon: any) => {
+          const res = await fetch(pokemon.url);
           const dto = await res.json();
           return {
             name: pokemon.name,
@@ -34,14 +34,28 @@ export default function Index() {
       console.log("Error fetching data:", error);
     }
   }
+  console.log("pokemmons", pokemmons);
   return (
     <ScrollView>
       {pokemmons.map((pokemon) => (
-        <View key={pokemon?.name}>
-          <Text>{pokemon?.name}</Text>
-          <Text>{pokemon?.image}</Text>
+        <View key={pokemon?.name} style={styles.wrapper}>
+          <Text style={styles.name}>{pokemon?.name}</Text>
+          <Text>{pokemon?.img}</Text>
         </View>
       ))}
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  name: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+});

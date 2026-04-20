@@ -1,4 +1,5 @@
 export interface PokemonType {
   name: string;
-  image: string;
+  img: string;
+  url: string;
 }
